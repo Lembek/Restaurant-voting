@@ -1,4 +1,4 @@
-package com.github.lembek.Restaurantvoting;
+package com.github.lembek.RestaurantVoting;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
