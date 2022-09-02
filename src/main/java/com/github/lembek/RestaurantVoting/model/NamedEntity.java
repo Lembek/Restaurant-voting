@@ -11,11 +11,15 @@ import javax.validation.constraints.Size;
 @Setter
 @MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class NamedEntity extends BaseEntity {
 
     @NotBlank
-    @Size(min = 2, max = 128)
+    @Size(min = 4, max = 128)
     @Column(name = "name", nullable = false)
     protected String name;
+
+    public NamedEntity(Integer id, String name) {
+        super(id);
+        this.name = name;
+    }
 }

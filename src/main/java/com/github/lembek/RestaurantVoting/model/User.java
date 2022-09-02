@@ -1,29 +1,30 @@
 package com.github.lembek.RestaurantVoting.model;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends NamedEntity {
 
     @NotBlank
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Email
     @NotBlank
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "role")
@@ -35,4 +36,20 @@ public class User extends NamedEntity {
 
     @OneToMany
     private List<Vote> votes;
+
+    public User(Integer id, String name, String password, String email, Collection<Role> roles, List<Vote> votes) {
+        super(id, name);
+        this.password = password;
+        this.email = email;
+        this.votes = votes;
+        setRoles(roles);
+    }
+
+    public User(Integer id, String name, String password, String email, Role...roles) {
+        this(id,name,password,email, Arrays.asList(roles),null);
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
+    }
 }
