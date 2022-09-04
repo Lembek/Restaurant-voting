@@ -1,6 +1,9 @@
 package com.github.lembek.RestaurantVoting.model;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -21,5 +24,10 @@ public abstract class NamedEntity extends BaseEntity {
     public NamedEntity(Integer id, String name) {
         super(id);
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + '[' + name + ']';
     }
 }

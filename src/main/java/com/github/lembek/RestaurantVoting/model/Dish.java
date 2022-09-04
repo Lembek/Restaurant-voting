@@ -1,18 +1,18 @@
 package com.github.lembek.RestaurantVoting.model;
 
-import lombok.*;
-import org.springframework.util.CollectionUtils;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "dish", uniqueConstraints = {@UniqueConstraint(columnNames = {"name","price"}, name = "dish_unique_name_price_idx")})
+@Table(name = "dish", indexes =
+        {@Index(name = "dish_restaurant_id_local_date_idx", columnList = "restaurant_id, local_date")})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,16 +23,28 @@ public class Dish extends NamedEntity {
     @Column(name = "price", nullable = false)
     private int price;
 
-    @ManyToMany(mappedBy = "lunchMenu")
-    private List<Menu> menu;
+    @NotNull
+    @Column(name = "local_date", nullable = false, updatable = false, columnDefinition = "date default now()")
+    private LocalDate localDate;
 
-    public Dish(Integer id, String name, int price, Menu...menu) {
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id", nullable = false, updatable = false)
+    private Restaurant restaurant;
+
+    public Dish(Integer id, String name, int price, LocalDate localDate, Restaurant restaurant) {
         super(id, name);
         this.price = price;
-        setMenu(Arrays.asList(menu));
+        this.localDate = localDate;
+        this.restaurant = restaurant;
     }
 
-    public void setMenu(Collection<Menu> menu) {
-        this.menu = CollectionUtils.isEmpty(menu) ? Collections.emptyList() : List.copyOf(menu);
+    public Dish(Integer id, String name, int price, LocalDate localDate) {
+        super(id, name);
+        this.price = price;
+        this.localDate = localDate;
+    }
+
+    public Dish(Integer id, String name, int price, Restaurant restaurant) {
+        this(id, name, price, LocalDate.now(), restaurant);
     }
 }

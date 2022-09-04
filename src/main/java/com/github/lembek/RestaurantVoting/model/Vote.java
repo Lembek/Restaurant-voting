@@ -1,20 +1,24 @@
 package com.github.lembek.RestaurantVoting.model;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "vote", uniqueConstraints = {@UniqueConstraint(columnNames = {"local_date", "user_id"}, name = "vote_unique_local_date_user_idx")})
+@Table(name = "vote", uniqueConstraints = {@UniqueConstraint(columnNames = {"local_date", "user_id"},
+        name = "vote_unique_local_date_user_idx")})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Vote extends BaseEntity {
 
     @NotNull
-    @Column(name = "local_date", nullable = false, updatable = false)
+    @Column(name = "local_date", nullable = false, updatable = false, columnDefinition = "date default now()")
     private LocalDate localDate;
 
     @ManyToOne
