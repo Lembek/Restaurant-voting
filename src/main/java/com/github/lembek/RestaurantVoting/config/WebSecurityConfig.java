@@ -37,8 +37,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("authenticated").authenticated()
-                .antMatchers("/").permitAll()
+                .antMatchers("/restaurants/**", "/profile").authenticated()
+                .antMatchers("/registration").permitAll()
                 .and()
                 .httpBasic()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
