@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 class AdminDishControllerTest extends AbstractControllerTest {
-    public static final String ADMIN_DISH_TEST_URL = ADMIN_RESTAURANT_URL + FIRST_ID + "/dishes/";
+    public static final String ADMIN_DISH_TEST_URL = ADMIN_RESTAURANT_URL + "/" + FIRST_ID + "/dishes";
 
     @Autowired
     private DishRepository dishRepository;
@@ -43,13 +43,13 @@ class AdminDishControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        DISH_MATCHER.assertMatch(dishRepository.findById(SIXTH_ID).get(), newDish);
+        DISH_MATCHER.assertMatch(dishRepository.getExisted(SIXTH_ID), newDish);
     }
 
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void remove() throws Exception {
-        perform(delete(ADMIN_DISH_TEST_URL + FIRST_ID))
+        perform(delete(ADMIN_DISH_TEST_URL + "/" + FIRST_ID))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
@@ -59,12 +59,12 @@ class AdminDishControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void update() throws Exception {
-        perform(patch(ADMIN_DISH_TEST_URL + FIRST_ID)
+        perform(patch(ADMIN_DISH_TEST_URL + "/" + FIRST_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("price", "150"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        DISH_MATCHER.assertMatch(dishRepository.findById(FIRST_ID).get(), getUpdatedDish());
+        DISH_MATCHER.assertMatch(dishRepository.getExisted(FIRST_ID), getUpdatedDish());
     }
 }

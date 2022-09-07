@@ -31,7 +31,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        RESTAURANT_MATCHER.assertMatch(restaurantRepository.findById(THIRD_ID).get(), newRestaurant);
+        RESTAURANT_MATCHER.assertMatch(restaurantRepository.getExisted(THIRD_ID), newRestaurant);
     }
 
     @Test
@@ -46,7 +46,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void getOne() throws Exception {
-        perform(get(ADMIN_RESTAURANT_URL + FIRST_ID))
+        perform(get(ADMIN_RESTAURANT_URL + "/" + FIRST_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(RESTAURANT_MATCHER.contentJson(restaurant1));
@@ -55,7 +55,7 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void remove() throws Exception {
-        perform(delete(ADMIN_RESTAURANT_URL + FIRST_ID))
+        perform(delete(ADMIN_RESTAURANT_URL + "/" + FIRST_ID))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
@@ -65,12 +65,12 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void update() throws Exception {
-        perform(patch(ADMIN_RESTAURANT_URL + FIRST_ID)
+        perform(patch(ADMIN_RESTAURANT_URL + "/" + FIRST_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("name", "updated restaurant"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        RESTAURANT_MATCHER.assertMatch(restaurantRepository.findById(FIRST_ID).get(), getUpdatedRestaurant());
+        RESTAURANT_MATCHER.assertMatch(restaurantRepository.getExisted(FIRST_ID), getUpdatedRestaurant());
     }
 }

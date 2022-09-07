@@ -20,8 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 class VoteControllerTest extends AbstractControllerTest {
-    public static final String VOTE_TEST_FIRST_RESTAURANT_URL = RESTAURANT_URL + FIRST_ID + "/votes/";
-    public static final String VOTE_TEST_SECOND_RESTAURANT_URL = RESTAURANT_URL + SECOND_ID + "/votes/";
+    public static final String VOTE_TEST_FIRST_RESTAURANT_URL = RESTAURANT_URL + "/" + FIRST_ID + "/votes";
+    public static final String VOTE_TEST_SECOND_RESTAURANT_URL = RESTAURANT_URL + "/" + SECOND_ID + "/votes";
     public static final LocalTime BOUNDARY_TEST_TIME = LocalTime.of(11, 0);
 
     @Autowired
@@ -69,7 +69,7 @@ class VoteControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(USER_MAIL)
     void getRate() throws Exception {
-        perform(get(VOTE_TEST_FIRST_RESTAURANT_URL + "rate"))
+        perform(get(VOTE_TEST_FIRST_RESTAURANT_URL + "/rate"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"));

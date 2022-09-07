@@ -23,7 +23,6 @@ public class PopulateTestData {
 
     public static final User user = new User(FIRST_ID, "User", "{noop}password", "user@gmail.com", Role.USER);
     public static final User admin = new User(SECOND_ID, "Admin", "{noop}admin", "admin@javaops.ru", Role.ADMIN, Role.USER);
-    public static final User newUser = new User(THIRD_ID, "new User", "{noop}somePassword", "email@yadex.ru", Role.USER);
     public static final User updated = new User(FIRST_ID, "updated user", "{noop}new password", "newemail@gmail.com", Role.USER);
 
     public static final Restaurant restaurant1 = new Restaurant(FIRST_ID, "Restaurant1");

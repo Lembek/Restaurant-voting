@@ -2,6 +2,7 @@ package com.github.lembek.RestaurantVoting.controller;
 
 import com.github.lembek.RestaurantVoting.util.JsonUtil;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.io.UnsupportedEncodingException;
@@ -49,6 +50,10 @@ public class MatcherFactory {
 
         public ResultMatcher contentJson(T expected) {
             return result -> assertMatch(JsonUtil.readValue(getContent(result), clazz), expected);
+        }
+
+        public T readFromJson(ResultActions action) throws UnsupportedEncodingException {
+            return JsonUtil.readValue(getContent(action.andReturn()), clazz);
         }
 
         @SafeVarargs

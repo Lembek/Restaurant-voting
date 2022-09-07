@@ -21,8 +21,8 @@ import static com.github.lembek.RestaurantVoting.util.ValidationUtil.checkNew;
 @AllArgsConstructor
 @RequestMapping(value = AdminController.ADMIN_USER_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminController {
-    public static final String ADMIN_URL = "/admin/";
-    public static final String ADMIN_USER_URL = ADMIN_URL + "users/";
+    public static final String ADMIN_URL = "/admin";
+    public static final String ADMIN_USER_URL = ADMIN_URL + "/users";
 
     private final UserRepository userRepository;
 
@@ -32,20 +32,20 @@ public class AdminController {
         return userRepository.findAll();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public User getOne(@PathVariable int id) {
         log.info("get user with id={}", id);
         return userRepository.getExisted(id);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         log.info("delete user with id={}", id);
         userRepository.deleteExisted(id);
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changeEnable(@PathVariable int id, @RequestParam boolean enabled) {
@@ -54,7 +54,7 @@ public class AdminController {
         user.setEnabled(enabled);
     }
 
-    @PutMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable int id, @Valid @RequestBody User user) {
         log.info("put {} with id={}", user, id);

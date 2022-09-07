@@ -20,7 +20,7 @@ import static com.github.lembek.RestaurantVoting.util.ValidationUtil.checkNew;
 @AllArgsConstructor
 @RequestMapping(value = AdminRestaurantController.ADMIN_RESTAURANT_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminRestaurantController {
-    public static final String ADMIN_RESTAURANT_URL = ADMIN_URL + "restaurants/";
+    public static final String ADMIN_RESTAURANT_URL = ADMIN_URL + "/restaurants";
 
     private final RestaurantRepository restaurantRepository;
 
@@ -38,20 +38,20 @@ public class AdminRestaurantController {
         return restaurantRepository.findAll();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Restaurant getOne(@PathVariable int id) {
         log.info("get restaurant with id={}", id);
         return restaurantRepository.getExisted(id);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
         log.info("delete restaurant with id={}", id);
         restaurantRepository.deleteExisted(id);
     }
 
-    @PatchMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void update(@PathVariable int id, @RequestParam String name) {

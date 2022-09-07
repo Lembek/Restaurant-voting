@@ -20,7 +20,7 @@ import static com.github.lembek.RestaurantVoting.controller.RestaurantController
 @AllArgsConstructor
 @RequestMapping(value = DishController.DISH_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class DishController {
-    public static final String DISH_URL = RESTAURANT_URL + "{id}/dishes";
+    public static final String DISH_URL = RESTAURANT_URL + "/{id}/dishes";
 
     private final DishRepository dishRepository;
 

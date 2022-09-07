@@ -14,12 +14,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class AdminVoteControllerTest extends AbstractControllerTest {
-    public static final String ADMIN_VOTE_TEST_URL = ADMIN_RESTAURANT_URL + FIRST_ID + "/votes/";
+    public static final String ADMIN_VOTE_TEST_URL = ADMIN_RESTAURANT_URL + "/" + FIRST_ID + "/votes";
 
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void getRateByDate() throws Exception {
-        perform(get(ADMIN_VOTE_TEST_URL + "rate"))
+        perform(get(ADMIN_VOTE_TEST_URL + "/rate"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"));

@@ -25,7 +25,7 @@ import static com.github.lembek.RestaurantVoting.controller.RestaurantController
 @RequestMapping(value = VoteController.VOTE_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteController {
     private static final LocalTime BOUNDARY_TIME = LocalTime.of(11, 0);
-    public static final String VOTE_URL = RESTAURANT_URL + "{id}/votes/";
+    public static final String VOTE_URL = RESTAURANT_URL + "/{id}/votes";
 
     private VoteRepository voteRepository;
     private RestaurantRepository restaurantRepository;
@@ -57,7 +57,7 @@ public class VoteController {
         vote.setRestaurant(restaurantRepository.getReferenceById(id));
     }
 
-    @GetMapping("rate")
+    @GetMapping("/rate")
     public int getRate(@PathVariable int id) {
         log.info("get rate of restaurant with id={}", id);
         return voteRepository.getRate(id, LocalDate.now());

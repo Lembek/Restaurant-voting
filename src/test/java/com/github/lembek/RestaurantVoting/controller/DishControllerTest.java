@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class DishControllerTest extends AbstractControllerTest {
-    public static final String DISH_TEST_URL = RESTAURANT_URL + FIRST_ID + "/dishes";
+    public static final String DISH_TEST_URL = RESTAURANT_URL + "/" + FIRST_ID + "/dishes";
 
     @Test
     @WithUserDetails(USER_MAIL)

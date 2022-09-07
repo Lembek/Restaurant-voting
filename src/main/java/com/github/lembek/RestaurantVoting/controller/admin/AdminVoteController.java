@@ -17,11 +17,11 @@ import static com.github.lembek.RestaurantVoting.controller.admin.AdminRestauran
 @AllArgsConstructor
 @RequestMapping(value = AdminVoteController.ADMIN_VOTE_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminVoteController {
-    public static final String ADMIN_VOTE_URL = ADMIN_RESTAURANT_URL + "{id}/votes/";
+    public static final String ADMIN_VOTE_URL = ADMIN_RESTAURANT_URL + "/{id}/votes";
 
     private final VoteRepository voteRepository;
 
-    @GetMapping("rate")
+    @GetMapping("/rate")
     public int getRateByDate(@PathVariable int id, @RequestParam(required = false) LocalDate localDate) {
         log.info("get rate of restaurant with id={}", id);
         return voteRepository.getRate(id, prepareLocalDate(localDate));

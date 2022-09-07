@@ -1,12 +1,14 @@
 package com.github.lembek.RestaurantVoting.controller;
 
 import com.github.lembek.RestaurantVoting.AbstractControllerTest;
+import com.github.lembek.RestaurantVoting.model.User;
 import com.github.lembek.RestaurantVoting.repository.UserRepository;
 import com.github.lembek.RestaurantVoting.util.JsonUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.github.lembek.RestaurantVoting.PopulateTestData.*;
@@ -55,18 +57,21 @@ class UserControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
-        USER_MATCHER.assertMatch(userRepository.findById(FIRST_ID).get(), updated);
+        USER_MATCHER.assertMatch(userRepository.getExisted(FIRST_ID), updated);
     }
 
     @Test
     void register() throws Exception {
-        perform(post("/registration")
+        User newUser = getNewUser();
+        ResultActions action = perform(post("/registration")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeAdditionProps(getNewUser(), "password", "somePassword")))
                 .andDo(print())
                 .andExpect(status().isCreated());
+        User user = USER_MATCHER.readFromJson(action);
+        newUser.setId(user.getId());
 
-        USER_MATCHER.assertMatch(userRepository.findById(THIRD_ID).get(), newUser);
+        USER_MATCHER.assertMatch(userRepository.getExisted(user.getId()), newUser);
     }
 
 }

@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping(value = RestaurantController.RESTAURANT_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController {
-    public static final String RESTAURANT_URL = "/restaurants/";
+    public static final String RESTAURANT_URL = "/restaurants";
 
     private final RestaurantRepository restaurantRepository;
 
@@ -27,7 +27,7 @@ public class RestaurantController {
         return restaurantRepository.findAll();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Restaurant getOne(@PathVariable int id) {
         log.info("get restaurant with id={}", id);
         return restaurantRepository.getExisted(id);

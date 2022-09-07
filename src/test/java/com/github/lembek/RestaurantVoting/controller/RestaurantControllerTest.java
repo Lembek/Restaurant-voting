@@ -24,7 +24,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(USER_MAIL)
     void getOne() throws Exception {
-        perform(get(RESTAURANT_URL + FIRST_ID))
+        perform(get(RESTAURANT_URL + "/" + FIRST_ID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(RESTAURANT_MATCHER.contentJson(restaurant1));

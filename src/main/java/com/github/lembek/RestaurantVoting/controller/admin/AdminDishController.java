@@ -26,7 +26,7 @@ import static com.github.lembek.RestaurantVoting.util.ValidationUtil.checkNew;
 @AllArgsConstructor
 @RequestMapping(value = AdminDishController.ADMIN_DISH_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminDishController {
-    public static final String ADMIN_DISH_URL = ADMIN_RESTAURANT_URL + "{id}/dishes/";
+    public static final String ADMIN_DISH_URL = ADMIN_RESTAURANT_URL + "/{id}/dishes";
 
     private final RestaurantRepository restaurantRepository;
     private final DishRepository dishRepository;
@@ -53,7 +53,7 @@ public class AdminDishController {
         return dishRepository.save(dish);
     }
 
-    @DeleteMapping("{dishId}")
+    @DeleteMapping("/{dishId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void delete(@PathVariable int id, @PathVariable int dishId) {
@@ -63,7 +63,7 @@ public class AdminDishController {
         dishRepository.deleteExisted(dishId);
     }
 
-    @PatchMapping(value = "{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void update(@PathVariable int id, @PathVariable int dishId,
@@ -80,7 +80,7 @@ public class AdminDishController {
         }
     }
 
-    @GetMapping("{dishId}")
+    @GetMapping("/{dishId}")
     public Dish getOne(@PathVariable int id, @PathVariable int dishId) {
         log.info("get dish with id={} and restaurantId={}", dishId, id);
         Dish dish = dishRepository.getExisted(dishId);
