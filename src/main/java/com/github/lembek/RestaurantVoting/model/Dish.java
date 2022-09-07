@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -29,6 +31,7 @@ public class Dish extends NamedEntity {
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
     public Dish(Integer id, String name, int price, LocalDate localDate, Restaurant restaurant) {

@@ -1,0 +1,96 @@
+package com.github.lembek.RestaurantVoting.controller.admin;
+
+import com.github.lembek.RestaurantVoting.AbstractControllerTest;
+import com.github.lembek.RestaurantVoting.repository.UserRepository;
+import com.github.lembek.RestaurantVoting.util.JsonUtil;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.transaction.annotation.Transactional;
+
+import static com.github.lembek.RestaurantVoting.PopulateTestData.*;
+import static com.github.lembek.RestaurantVoting.controller.admin.AdminController.ADMIN_USER_URL;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@Transactional
+class AdminControllerTest extends AbstractControllerTest {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Test
+    @WithUserDetails(USER_MAIL)
+    void getForbidden() throws Exception {
+        perform(get(ADMIN_USER_URL))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithUserDetails(ADMIN_MAIL)
+    void getAll() throws Exception {
+        perform(get(ADMIN_USER_URL))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(USER_MATCHER.contentJson(user, admin));
+    }
+
+    @Test
+    @WithUserDetails(ADMIN_MAIL)
+    void getOne() throws Exception {
+        perform(get(ADMIN_USER_URL + FIRST_ID))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(USER_MATCHER.contentJson(user));
+    }
+
+    @Test
+    @WithUserDetails(ADMIN_MAIL)
+    void remove() throws Exception {
+        perform(delete(ADMIN_USER_URL + FIRST_ID))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        assertFalse(userRepository.existsById(FIRST_ID));
+    }
+
+    @Test
+    @WithUserDetails(ADMIN_MAIL)
+    void changeEnable() throws Exception {
+        perform(patch(ADMIN_USER_URL + FIRST_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("enabled", "false"))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        assertFalse(userRepository.findById(FIRST_ID).get().isEnabled());
+    }
+
+    @Test
+    @WithUserDetails(ADMIN_MAIL)
+    void update() throws Exception {
+        perform(put(ADMIN_USER_URL + FIRST_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeAdditionProps(getUpdatedUser(), "password", "new password")))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        USER_MATCHER.assertMatch(userRepository.findById(FIRST_ID).get(), updated);
+    }
+
+    @Test
+    @WithUserDetails(ADMIN_MAIL)
+    void create() throws Exception {
+        perform(post(ADMIN_USER_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeAdditionProps(getNewUser(), "password", "somePassword")))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        USER_MATCHER.assertMatch(userRepository.findById(THIRD_ID).get(), newUser);
+    }
+}

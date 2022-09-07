@@ -5,8 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -48,7 +48,8 @@ public class User extends NamedEntity {
             uniqueConstraints = @UniqueConstraint(name = "user_role_unique_idx", columnNames = {"user_id", "role"}))
     @Enumerated(EnumType.STRING)
     @ElementCollection(fetch = FetchType.EAGER)
-    @Fetch(value = FetchMode.SUBSELECT)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "id")
     private Set<Role> roles;
 
     public User(Integer id, String name, String password, String email, Collection<Role> roles) {
