@@ -6,6 +6,8 @@ import com.github.lembek.RestaurantVoting.repository.UserRepository;
 import com.github.lembek.RestaurantVoting.util.UserUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +20,7 @@ import static com.github.lembek.RestaurantVoting.util.ValidationUtil.assureIdCon
 
 @Slf4j
 @RestController
+@CacheConfig(cacheNames = "users")
 @AllArgsConstructor
 public class UserController {
 
@@ -29,6 +32,7 @@ public class UserController {
         return authUser.getUser();
     }
 
+    @CacheEvict(allEntries = true)
     @DeleteMapping("/profile")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@AuthenticationPrincipal AuthUser authUser) {
@@ -44,6 +48,7 @@ public class UserController {
         return userRepository.save(preparedUser);
     }
 
+    @CacheEvict(allEntries = true)
     @PutMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)

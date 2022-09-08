@@ -5,6 +5,8 @@ import com.github.lembek.RestaurantVoting.repository.UserRepository;
 import com.github.lembek.RestaurantVoting.util.UserUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import static com.github.lembek.RestaurantVoting.util.ValidationUtil.checkNew;
 @Slf4j
 @RestController
 @AllArgsConstructor
+@CacheConfig(cacheNames = "users")
 @RequestMapping(value = AdminController.ADMIN_USER_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminController {
     public static final String ADMIN_URL = "/admin";
@@ -38,6 +41,7 @@ public class AdminController {
         return userRepository.getExisted(id);
     }
 
+    @CacheEvict(allEntries = true)
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
@@ -45,6 +49,7 @@ public class AdminController {
         userRepository.deleteExisted(id);
     }
 
+    @CacheEvict(allEntries = true)
     @PatchMapping("/{id}")
     @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -54,6 +59,7 @@ public class AdminController {
         user.setEnabled(enabled);
     }
 
+    @CacheEvict(allEntries = true)
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable int id, @Valid @RequestBody User user) {

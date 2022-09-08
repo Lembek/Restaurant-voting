@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.util.CollectionUtils;
@@ -50,6 +52,7 @@ public class User extends NamedEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id")
+    @Fetch(FetchMode.JOIN)
     private Set<Role> roles;
 
     public User(Integer id, String name, String password, String email, Collection<Role> roles) {

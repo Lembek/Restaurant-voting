@@ -6,6 +6,8 @@ import com.github.lembek.RestaurantVoting.repository.DishRepository;
 import com.github.lembek.RestaurantVoting.repository.RestaurantRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,6 +25,7 @@ import static com.github.lembek.RestaurantVoting.util.ValidationUtil.checkNew;
 
 @Slf4j
 @RestController
+@CacheConfig(cacheNames = "dishes")
 @AllArgsConstructor
 @RequestMapping(value = AdminDishController.ADMIN_DISH_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminDishController {
@@ -42,6 +45,7 @@ public class AdminDishController {
         return dishRepository.getLunchMenu(id, localDate);
     }
 
+    @CacheEvict(allEntries = true)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     @ResponseStatus(HttpStatus.CREATED)
@@ -53,6 +57,7 @@ public class AdminDishController {
         return dishRepository.save(dish);
     }
 
+    @CacheEvict(allEntries = true)
     @DeleteMapping("/{dishId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
@@ -63,6 +68,7 @@ public class AdminDishController {
         dishRepository.deleteExisted(dishId);
     }
 
+    @CacheEvict(allEntries = true)
     @PatchMapping(value = "/{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
