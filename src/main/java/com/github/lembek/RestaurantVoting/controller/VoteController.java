@@ -31,7 +31,7 @@ public class VoteController {
     private RestaurantRepository restaurantRepository;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping
     @Transactional
     public Vote vote(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
         log.info("make vote for restaurant with id={} by user with id={}", id, authUser.id());
@@ -42,7 +42,7 @@ public class VoteController {
         return voteRepository.save(new Vote(LocalDate.now(), authUser.getUser(), restaurantRepository.getReferenceById(id)));
     }
 
-    @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void changeVote(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {

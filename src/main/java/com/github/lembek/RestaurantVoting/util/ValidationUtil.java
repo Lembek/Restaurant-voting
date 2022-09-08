@@ -19,7 +19,10 @@ public class ValidationUtil {
         if (entity.isNew()) {
             entity.setId(id);
         } else if (entity.id() != id) {
-            throw new IllegalRequestDataException(entity.getClass().getSimpleName() + " must has id=" + id);
+            String message = entity.getClass().getSimpleName().equals("Restaurant") ?
+                    "Restaurant with id=" + id + " don't have this dish" :
+                    entity.getClass().getSimpleName() + " must has id=" + id;
+            throw new IllegalRequestDataException(message);
         }
     }
 
@@ -28,6 +31,7 @@ public class ValidationUtil {
             throw new IllegalRequestDataException("Entity with id=" + id + " not found");
         }
     }
+
     public static <T> T checkExisted(T obj, int id) {
         if (obj == null) {
             throw new IllegalRequestDataException("Entity with id=" + id + " not found");

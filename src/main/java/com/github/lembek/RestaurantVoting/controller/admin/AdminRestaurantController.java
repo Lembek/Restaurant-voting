@@ -57,7 +57,7 @@ public class AdminRestaurantController {
     }
 
     @CacheEvict(allEntries = true)
-    @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void update(@PathVariable int id, @RequestParam String name) {

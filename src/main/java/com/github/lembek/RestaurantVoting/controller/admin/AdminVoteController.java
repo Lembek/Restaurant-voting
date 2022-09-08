@@ -4,6 +4,7 @@ import com.github.lembek.RestaurantVoting.model.Vote;
 import com.github.lembek.RestaurantVoting.repository.VoteRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,13 +23,15 @@ public class AdminVoteController {
     private final VoteRepository voteRepository;
 
     @GetMapping("/rate")
-    public int getRateByDate(@PathVariable int id, @RequestParam(required = false) LocalDate localDate) {
+    public int getRateByDate(@PathVariable int id, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @RequestParam(required = false) LocalDate localDate) {
         log.info("get rate of restaurant with id={}", id);
         return voteRepository.getRate(id, prepareLocalDate(localDate));
     }
 
     @GetMapping
-    public List<Vote> getAll(@PathVariable int id, @RequestParam(required = false) LocalDate localDate) {
+    public List<Vote> getAll(@PathVariable int id, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @RequestParam(required = false) LocalDate localDate) {
         log.info("get all votes of restaurants with id={}", id);
         return voteRepository.getAllByRestaurant(id, prepareLocalDate(localDate));
     }

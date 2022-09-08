@@ -69,7 +69,7 @@ public class AdminDishController {
     }
 
     @CacheEvict(allEntries = true)
-    @PatchMapping(value = "/{dishId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/{dishId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
     public void update(@PathVariable int id, @PathVariable int dishId,
