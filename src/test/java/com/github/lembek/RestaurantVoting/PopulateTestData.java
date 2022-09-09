@@ -9,7 +9,7 @@ public class PopulateTestData {
     public static final MatcherFactory.Matcher<Dish> DISH_MATCHER = MatcherFactory.usingEqualsComparator(Dish.class);
     public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingEqualsComparator(Restaurant.class);
     public static final MatcherFactory.Matcher<Vote> VOTE_MATCHER = MatcherFactory.usingEqualsComparator(Vote.class);
-    public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(User.class, "registered", "meals", "password");
+    public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(User.class, "registered", "password");
 
     public static final int FIRST_ID = 1;
     public static final int SECOND_ID = 2;
@@ -58,10 +58,10 @@ public class PopulateTestData {
     }
 
     public static User getNewUser() {
-        return new User(null, "new User", "somePassword", "email@yadex.ru", Role.USER);
+        return new User(null, "new User", "somePassword", "email@yadex.ru");
     }
 
     public static User getUpdatedUser() {
-        return new User(null, "updated user", "new password", "newemail@gmail.com", Role.USER);
+        return new User(null, "updated user", "new password", "newemail@gmail.com");
     }
 }

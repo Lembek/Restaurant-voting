@@ -1,6 +1,7 @@
 package com.github.lembek.RestaurantVoting.controller.admin;
 
 import com.github.lembek.RestaurantVoting.AbstractControllerTest;
+import com.github.lembek.RestaurantVoting.model.Role;
 import com.github.lembek.RestaurantVoting.model.User;
 import com.github.lembek.RestaurantVoting.repository.UserRepository;
 import com.github.lembek.RestaurantVoting.util.JsonUtil;
@@ -10,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
 
 import static com.github.lembek.RestaurantVoting.PopulateTestData.*;
 import static com.github.lembek.RestaurantVoting.controller.admin.AdminController.ADMIN_USER_URL;
@@ -75,9 +78,11 @@ class AdminControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void update() throws Exception {
+        User prepared = getUpdatedUser();
+        prepared.setRoles(Set.of(Role.USER));
         perform(put(ADMIN_USER_URL + "/" + FIRST_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeAdditionProps(getUpdatedUser(), "password", "new password")))
+                .content(JsonUtil.writeAdditionProps(prepared, "password", "new password")))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 

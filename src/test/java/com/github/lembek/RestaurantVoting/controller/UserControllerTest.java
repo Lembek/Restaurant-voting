@@ -1,6 +1,7 @@
 package com.github.lembek.RestaurantVoting.controller;
 
 import com.github.lembek.RestaurantVoting.AbstractControllerTest;
+import com.github.lembek.RestaurantVoting.model.Role;
 import com.github.lembek.RestaurantVoting.model.User;
 import com.github.lembek.RestaurantVoting.repository.UserRepository;
 import com.github.lembek.RestaurantVoting.util.JsonUtil;
@@ -10,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
 
 import static com.github.lembek.RestaurantVoting.PopulateTestData.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -51,7 +54,7 @@ class UserControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(USER_MAIL)
     void updateMySelf() throws Exception {
-        perform(put("/profile")
+        perform(patch("/profile")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeAdditionProps(getUpdatedUser(), "password", "new password")))
                 .andDo(print())
@@ -65,11 +68,12 @@ class UserControllerTest extends AbstractControllerTest {
         User newUser = getNewUser();
         ResultActions action = perform(post("/registration")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeAdditionProps(getNewUser(), "password", "somePassword")))
+                .content(JsonUtil.writeAdditionProps(newUser, "password", "somePassword")))
                 .andDo(print())
                 .andExpect(status().isCreated());
         User user = USER_MATCHER.readFromJson(action);
         newUser.setId(user.getId());
+        newUser.setRoles(Set.of(Role.USER));
 
         USER_MATCHER.assertMatch(userRepository.getExisted(user.getId()), newUser);
     }

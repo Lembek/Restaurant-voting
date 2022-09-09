@@ -3,7 +3,6 @@ package com.github.lembek.RestaurantVoting.controller;
 import com.github.lembek.RestaurantVoting.AuthUser;
 import com.github.lembek.RestaurantVoting.model.User;
 import com.github.lembek.RestaurantVoting.repository.UserRepository;
-import com.github.lembek.RestaurantVoting.util.UserUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static com.github.lembek.RestaurantVoting.util.UserUtil.prepareForRegistration;
+import static com.github.lembek.RestaurantVoting.util.UserUtil.prepareForUpdate;
 import static com.github.lembek.RestaurantVoting.util.ValidationUtil.assureIdConsistent;
 
 @Slf4j
@@ -44,18 +45,17 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public User register(@Valid @RequestBody User user) {
         log.info("registration {}", user);
-        User preparedUser = UserUtil.prepareToSave(user);
-        return userRepository.save(preparedUser);
+        return userRepository.save(prepareForRegistration(user));
     }
 
     @CacheEvict(allEntries = true)
-    @PutMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/profile", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@AuthenticationPrincipal AuthUser authUser, @Valid @RequestBody User user) {
         log.info("put user profile with id={}", authUser.id());
         assureIdConsistent(user, authUser.id());
-        User preparedUser = UserUtil.prepareToSave(user);
-        userRepository.save(preparedUser);
+        User updated = authUser.getUser();
+        userRepository.save(prepareForUpdate(updated, user));
     }
 }
