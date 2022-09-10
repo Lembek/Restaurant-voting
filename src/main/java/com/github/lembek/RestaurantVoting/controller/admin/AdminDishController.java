@@ -77,14 +77,14 @@ public class AdminDishController {
     @Transactional
     public void update(@PathVariable int id, @PathVariable int dishId,
                        @RequestParam(required = false) String name,
-                       @RequestParam(required = false) int price) {
+                       @RequestParam(required = false) Integer price) {
         log.info("patch dish with id={} and restaurantId={}", dishId, id);
         Dish dish = dishRepository.getExisted(dishId);
         assureIdConsistent(dish.getRestaurant(), id);
         if (StringUtils.hasText(name)) {
             dish.setName(name);
         }
-        if (price != 0) {
+        if (price != null) {
             dish.setPrice(price);
         }
     }
