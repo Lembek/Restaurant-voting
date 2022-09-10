@@ -6,7 +6,6 @@ Graduation project from [Topjava](https://javaops.ru/view/topjava)
 - Swagger
 - cURLs
 
-
 ## Technical requirement:
 Design and implement a REST API using Hibernate/Spring/SpringMVC (Spring-Boot preferred!) **without frontend**.
 
@@ -43,63 +42,177 @@ As a result, provide a link to github repository. It should contain the code, RE
 ## cURLs for tests
 ##### **Admin API: administration of users**
   - Get all:
-`curl -X GET --location "http://localhost:8080/admin/users" -H "Accept: application/json"  --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X GET --location "http://localhost:8080/admin/users" -H "Accept: application/json"  --basic --user admin@javaops.ru:admin
+```
+
   - Get one:
-`curl -X GET --location "http://localhost:8080/admin/users/1" -H "Accept: application/json" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X GET --location "http://localhost:8080/admin/users/1" -H "Accept: application/json" --basic --user admin@javaops.ru:admin
+```
+
   - Delete:
-`curl -X DELETE --location "http://localhost:8080/admin/users/1" -H "Accept: application/json" --basic --user admin@javaops.ru:admin`
-  - Create:
-`curl -X POST --location "http://localhost:8080/admin/users" -H "Content-Type: application/json" -d "{\"name\": \"string\",\"password\": \"string\",\"email\": \"string@gmail.com\",\"enabled\": true,\"roles\": [\"USER\"]}" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X DELETE --location "http://localhost:8080/admin/users/1" -H "Accept: application/json" --basic --user admin@javaops.ru:admin
+```
+ 
+ - Create:
+
+```console
+curl -X POST --location "http://localhost:8080/admin/users" -H "Content-Type: application/json" -d "{\"name\": \"string\",\"password\": \"string\",\"email\": \"string@gmail.com\",\"enabled\": true,\"roles\": [\"USER\"]}" --basic --user admin@javaops.ru:admin
+```
+
   - Disable:
-`curl -X PATCH --location "http://localhost:8080/admin/users/1?enabled=false" -H "Accept: application/json" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X PATCH --location "http://localhost:8080/admin/users/1?enabled=false" -H "Accept: application/json" --basic --user admin@javaops.ru:admin
+```
+
   - Update:
-`curl -X PUT --location "http://localhost:8080/admin/users/1" -H "Content-Type: application/json" -d "{\"name\": \"string\",\"password\": \"string\",\"email\": \"string@gmail.com\",\"enabled\": true,\"roles\": [\"USER\"]}" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X PUT --location "http://localhost:8080/admin/users/1" -H "Content-Type: application/json" -d "{\"name\": \"string\",\"password\": \"string\",\"email\": \"string@gmail.com\",\"enabled\": true,\"roles\": [\"USER\"]}" --basic --user admin@javaops.ru:admin
+```
+
 ##### **Admin API: administration of restaurants**
+
   - Get all:
-`curl -X GET --location "http://localhost:8080/admin/restaurants" -H "Accept: application/json" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X GET --location "http://localhost:8080/admin/restaurants" -H "Accept: application/json" --basic --user admin@javaops.ru:admin
+```
+
   - Get one:
-`curl -X GET --location "http://localhost:8080/admin/restaurants/1" -H "Accept: application/json" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X GET --location "http://localhost:8080/admin/restaurants/1" -H "Accept: application/json" --basic --user admin@javaops.ru:admin
+```
+
   - Delete:
-`curl -X DELETE --location "http://localhost:8080/admin/restaurants/1" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X DELETE --location "http://localhost:8080/admin/restaurants/1" --basic --user admin@javaops.ru:admin
+```
+
   - Update (change name):
-`curl -X PATCH --location "http://localhost:8080/admin/restaurants/1?name=name" -H "Content-Type: application/json" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X PATCH --location "http://localhost:8080/admin/restaurants/1?name=name" -H "Content-Type: application/json" --basic --user admin@javaops.ru:admin
+```
+
   - Create:
-`curl -X POST --location "http://localhost:8080/admin/restaurants" -H "Content-Type: application/json" -d "{\"name\": \"string\"}" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X POST --location "http://localhost:8080/admin/restaurants" -H "Content-Type: application/json" -d "{\"name\": \"string\"}" --basic --user admin@javaops.ru:admin
+```
+
 ##### **Admin API: administration of dishes**
+
   - Get menu of restaurant by date:
-`curl -X GET --location "http://localhost:8080/admin/restaurants/1/dishes?localDate=2000-05-11" -H "Accept: application/json" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X GET --location "http://localhost:8080/admin/restaurants/1/dishes?localDate=2000-05-11" -H "Accept: application/json" --basic --user admin@javaops.ru:admin
+```
+
   - Get one by id:
-`curl -X GET --location "http://localhost:8080/admin/restaurants/1/dishes/1" -H "Accept: application/json" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X GET --location "http://localhost:8080/admin/restaurants/1/dishes/1" -H "Accept: application/json" --basic --user admin@javaops.ru:admin
+```
+
   - Delete:
-`curl -X DELETE --location "http://localhost:8080/admin/restaurants/1/dishes/1" -H "Accept: application/json" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X DELETE --location "http://localhost:8080/admin/restaurants/1/dishes/1" -H "Accept: application/json" --basic --user admin@javaops.ru:admin
+```
+
   - Update:
-`curl -X PATCH --location "http://localhost:8080/admin/restaurants/1/dishes/1?name=string" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X PATCH --location "http://localhost:8080/admin/restaurants/1/dishes/1?name=string" --basic --user admin@javaops.ru:admin
+```
+
   - Create:
-`curl -X POST --location "http://localhost:8080/admin/restaurants/1/dishes" -H "Content-Type: application/json" -d "{\"name\": \"string\",\"price\": 100,\"localDate\": \"2022-09-10\"}"--basic --user admin@javaops.ru:admin`
+
+```console
+curl -X POST --location "http://localhost:8080/admin/restaurants/1/dishes" -H "Content-Type: application/json" -d "{\"name\": \"string\",\"price\": 100,\"localDate\": \"2022-09-10\"}"--basic --user admin@javaops.ru:admin
+```
+
 ##### **Admin API: administration of votes**
+
   - Get rate of restaurant by date:
-`curl -X GET --location "http://localhost:8080/admin/restaurants/1/votes/rate?localDate=2000-05-11" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X GET --location "http://localhost:8080/admin/restaurants/1/votes/rate?localDate=2000-05-11" --basic --user admin@javaops.ru:admin
+```
+
   - Get all for restaurant by date:
-`curl -X GET --location "http://localhost:8080/admin/restaurants/1/votes?localDate=2000-05-11" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X GET --location "http://localhost:8080/admin/restaurants/1/votes?localDate=2000-05-11" --basic --user admin@javaops.ru:admin
+```
+
 ##### **User API: profile**
+
   - Get user self:
-`curl -X GET --location "http://localhost:8080/profile" -H "Accept: application/json" --basic --user user@gmail.com:password`
+
+```console
+curl -X GET --location "http://localhost:8080/profile" -H "Accept: application/json" --basic --user user@gmail.com:password
+```
+
   - Delete user self:
-`curl -X DELETE --location "http://localhost:8080/profile" --basic --user user@gmail.com:password`
+
+```console
+curl -X DELETE --location "http://localhost:8080/profile" --basic --user user@gmail.com:password
+```
+
   - Update user self:
-`curl -X PATCH --location "http://localhost:8080/profile" -H "Content-Type: application/json" -d "{\"name\": \"string\",\"password\": \"string\",\"email\": \"string@gmail.com\",\"enabled\": true,\"roles\": [\"USER\"]}" --basic --user user@gmail.com:password`
+
+```console
+curl -X PATCH --location "http://localhost:8080/profile" -H "Content-Type: application/json" -d "{\"name\": \"string\",\"password\": \"string\",\"email\": \"string@gmail.com\",\"enabled\": true,\"roles\": [\"USER\"]}" --basic --user user@gmail.com:password
+```
+
 ##### **User API: restaurant**
+
   - Get all:
-`curl -X GET --location "http://localhost:8080/restaurants" -H "Accept: application/json" --basic --user user@gmail.com:password`
+
+```console
+curl -X GET --location "http://localhost:8080/restaurants" -H "Accept: application/json" --basic --user user@gmail.com:password
+```
+
   - Get one:
-`curl -X GET --location "http://localhost:8080/restaurants/1" -H "Accept: application/json" --basic --user user@gmail.com:password`
+
+```console
+curl -X GET --location "http://localhost:8080/restaurants/1" -H "Accept: application/json" --basic --user user@gmail.com:password
+```
+
 ##### **User API: dishes**
+
   - Get lunch menu of restaurant:
-`curl -X GET --location "http://localhost:8080/restaurants/1/dishes" -H "Accept: application/json" --basic --user user@gmail.com:password`
+
+```console
+curl -X GET --location "http://localhost:8080/restaurants/1/dishes" -H "Accept: application/json" --basic --user user@gmail.com:password
+```
+
 ##### **User API: votes**
+
   - Make vote:
-`curl -X POST --location "http://localhost:8080/restaurants/1/votes" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X POST --location "http://localhost:8080/restaurants/1/votes" --basic --user admin@javaops.ru:admin
+```
+
   - Try to change vote:
-`curl -X PATCH --location "http://localhost:8080/restaurants/1/votes" --basic --user admin@javaops.ru:admin`
+
+```console
+curl -X PATCH --location "http://localhost:8080/restaurants/1/votes" --basic --user admin@javaops.ru:admin
+```
+
   - Get rate of restaurant:
-`curl -X GET --location "http://localhost:8080/restaurants/1/votes/rate" --basic --user user@gmail.com:password`
+
+```console
+curl -X GET --location "http://localhost:8080/restaurants/1/votes/rate" --basic --user user@gmail.com:password
+```
