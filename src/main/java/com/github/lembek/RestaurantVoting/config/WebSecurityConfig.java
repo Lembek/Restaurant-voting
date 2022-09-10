@@ -24,7 +24,7 @@ public class WebSecurityConfig {
     public static final PasswordEncoder PASSWORD_ENCODER = PasswordEncoderFactories.createDelegatingPasswordEncoder();
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(WebSecurityConfig.class);
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public WebSecurityConfig(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -50,11 +50,11 @@ public class WebSecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-         return email -> {
-             log.debug("Authenticating '{}'", email);
-             Optional<User> userOptional = userRepository.findByEmailIgnoreCase(email);
-             return new AuthUser(userOptional.orElseThrow(
-                     () -> new UsernameNotFoundException("Not found user with email" + email)));
-         };
+        return email -> {
+            log.debug("Authenticating '{}'", email);
+            Optional<User> userOptional = userRepository.findByEmailIgnoreCase(email);
+            return new AuthUser(userOptional.orElseThrow(
+                    () -> new UsernameNotFoundException("Not found user with email" + email)));
+        };
     }
 }

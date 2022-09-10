@@ -5,6 +5,7 @@ import com.github.lembek.RestaurantVoting.util.ValidationUtil;
 import org.slf4j.Logger;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +26,28 @@ import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.M
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    public static final String DUPLICATE_EMAIL = "User with the same email is already exist";
+    public static final String DUPLICATE_RESTAURANT_EMAIL = "Restaurant with the same name is already exist";
+    public static final String SECOND_VOTE_PER_DAY = "You have already voted today, but you can change vote until 11 a.m.";
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private final ErrorAttributes errorAttributes;
 
     public GlobalExceptionHandler(ErrorAttributes errorAttributes) {
         this.errorAttributes = errorAttributes;
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> dataIntegrityException(WebRequest request, DataIntegrityViolationException ex) {
+        log.error("DataIntegrityViolationException: {}", ex.getMessage());
+        String message = DUPLICATE_EMAIL;
+        String url = request.getDescription(false);
+        if (url.contains("votes")) {
+            message = SECOND_VOTE_PER_DAY;
+        } else if (url.contains("restaurants")) {
+            message = DUPLICATE_RESTAURANT_EMAIL;
+        }
+        return createResponseEntity(request, ErrorAttributeOptions.of(MESSAGE),
+                message, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(AppException.class)

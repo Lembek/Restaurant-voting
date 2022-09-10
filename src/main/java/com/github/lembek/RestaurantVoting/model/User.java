@@ -59,6 +59,10 @@ public class User extends NamedEntity {
         this(id, name, password, email, Arrays.asList(roles));
     }
 
+    public User(User user) {
+        this(null, user.getName(), user.getPassword(), user.getEmail(), user.getRoles());
+    }
+
     protected User() {
     }
 

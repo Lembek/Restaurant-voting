@@ -25,8 +25,8 @@ public class VoteController {
     public static final String VOTE_URL = RESTAURANT_URL + "/{id}/votes";
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(VoteController.class);
 
-    private VoteRepository voteRepository;
-    private RestaurantRepository restaurantRepository;
+    private final VoteRepository voteRepository;
+    private final RestaurantRepository restaurantRepository;
 
     public VoteController(VoteRepository voteRepository, RestaurantRepository restaurantRepository) {
         this.voteRepository = voteRepository;
@@ -38,10 +38,6 @@ public class VoteController {
     @Transactional
     public Vote vote(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
         log.info("make vote for restaurant with id={} by user with id={}", id, authUser.id());
-        Vote vote = voteRepository.getByUserAndDate(LocalDate.now(), authUser.id());
-        if (vote != null) {
-            throw new VoteAlreadyExistException("You have already voted today for restaurant with id = " + vote.getRestaurant().id() + " but you can change your vote");
-        }
         return voteRepository.save(new Vote(LocalDate.now(), authUser.getUser(), restaurantRepository.getReferenceById(id)));
     }
 
@@ -55,7 +51,7 @@ public class VoteController {
             throw new IllegalRequestDataException("You haven't already voted today");
         }
         if (LocalTime.now().isAfter(BOUNDARY_TIME)) {
-            throw new VoteAlreadyExistException("You can't change your vote after 11:00");
+            throw new VoteAlreadyExistException("You can't change your vote after 11:00 a.m.");
         }
         vote.setRestaurant(restaurantRepository.getReferenceById(id));
     }

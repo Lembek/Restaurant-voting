@@ -78,4 +78,14 @@ class UserControllerTest extends AbstractControllerTest {
         USER_MATCHER.assertMatch(userRepository.getExisted(user.getId()), newUser);
     }
 
+    @Test
+    void registerDuplicateEmail() throws Exception {
+        User prepared = new User(user);
+        perform(post("/registration")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeAdditionProps(prepared, "password", prepared.getPassword())))
+                .andDo(print())
+                .andExpect(status().isConflict());
+    }
+
 }

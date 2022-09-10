@@ -1,6 +1,7 @@
 package com.github.lembek.RestaurantVoting.controller.admin;
 
 import com.github.lembek.RestaurantVoting.AbstractControllerTest;
+import com.github.lembek.RestaurantVoting.model.Restaurant;
 import com.github.lembek.RestaurantVoting.repository.RestaurantRepository;
 import com.github.lembek.RestaurantVoting.util.JsonUtil;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,17 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isCreated());
 
         RESTAURANT_MATCHER.assertMatch(restaurantRepository.getExisted(THIRD_ID), newRestaurant);
+    }
+
+    @Test
+    @WithUserDetails(ADMIN_MAIL)
+    void createDuplicateName() throws Exception {
+        Restaurant prepared = new Restaurant(null, restaurant1.getName());
+        perform(post(ADMIN_RESTAURANT_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(prepared)))
+                .andDo(print())
+                .andExpect(status().isConflict());
     }
 
     @Test
