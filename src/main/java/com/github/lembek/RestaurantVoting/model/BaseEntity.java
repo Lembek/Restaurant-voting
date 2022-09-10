@@ -15,7 +15,7 @@ public abstract class BaseEntity implements Persistable<Integer> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    protected Integer id;
+    private Integer id;
 
     protected BaseEntity(Integer id) {
         this.id = id;

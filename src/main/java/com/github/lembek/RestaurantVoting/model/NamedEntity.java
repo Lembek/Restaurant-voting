@@ -7,11 +7,13 @@ import javax.validation.constraints.Size;
 
 @MappedSuperclass
 public abstract class NamedEntity extends BaseEntity {
+    private static final int MIN_LENGTH = 4;
+    private static final int MAX_LENGTH = 128;
 
     @NotBlank
-    @Size(min = 4, max = 128)
+    @Size(min = MIN_LENGTH, max = MAX_LENGTH)
     @Column(name = "name", nullable = false)
-    protected String name;
+    private String name;
 
     public NamedEntity(Integer id, String name) {
         super(id);
@@ -26,11 +28,11 @@ public abstract class NamedEntity extends BaseEntity {
         return super.toString() + '[' + name + ']';
     }
 
-    public @NotBlank @Size(min = 4, max = 128) String getName() {
+    public @NotBlank @Size(min = MIN_LENGTH, max = MAX_LENGTH) String getName() {
         return this.name;
     }
 
-    public void setName(@NotBlank @Size(min = 4, max = 128) String name) {
+    public void setName(@NotBlank @Size(min = MIN_LENGTH, max = MAX_LENGTH) String name) {
         this.name = name;
     }
 }

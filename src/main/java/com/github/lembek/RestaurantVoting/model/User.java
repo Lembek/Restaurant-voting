@@ -17,16 +17,18 @@ import java.util.*;
 @Entity
 @Table(name = "users")
 public class User extends NamedEntity {
+    private static final int MAX_LENGTH_PASSWORD = 256;
+    private static final int MAX_LENGTH_EMAIL = 128;
 
     @NotBlank
-    @Size(max = 256)
+    @Size(max = MAX_LENGTH_PASSWORD)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "password", nullable = false)
     private String password;
 
     @Email
     @NotBlank
-    @Size(max = 128)
+    @Size(max = MAX_LENGTH_EMAIL)
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
@@ -70,11 +72,11 @@ public class User extends NamedEntity {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
 
-    public @NotBlank @Size(max = 256) String getPassword() {
+    public @NotBlank @Size(max = MAX_LENGTH_PASSWORD) String getPassword() {
         return this.password;
     }
 
-    public @Email @NotBlank @Size(max = 128) String getEmail() {
+    public @Email @NotBlank @Size(max = MAX_LENGTH_EMAIL) String getEmail() {
         return this.email;
     }
 
@@ -91,11 +93,11 @@ public class User extends NamedEntity {
     }
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public void setPassword(@NotBlank @Size(max = 256) String password) {
+    public void setPassword(@NotBlank @Size(max = MAX_LENGTH_PASSWORD) String password) {
         this.password = password;
     }
 
-    public void setEmail(@Email @NotBlank @Size(max = 128) String email) {
+    public void setEmail(@Email @NotBlank @Size(max = MAX_LENGTH_EMAIL) String email) {
         this.email = email;
     }
 

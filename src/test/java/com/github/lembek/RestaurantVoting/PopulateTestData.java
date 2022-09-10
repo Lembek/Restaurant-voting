@@ -41,6 +41,9 @@ public class PopulateTestData {
     public static final Vote newVote = new Vote(THIRD_ID, LocalDate.now(), admin, restaurant2);
     public static final Vote changedVote = new Vote(FIRST_ID, LocalDate.now(), user, restaurant2);
 
+    private PopulateTestData() {
+    }
+
     public static Dish getNewDish() {
         return new Dish(null, "new dish", 100, LocalDate.now());
     }
