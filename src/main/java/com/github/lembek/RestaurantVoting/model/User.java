@@ -1,10 +1,6 @@
 package com.github.lembek.RestaurantVoting.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OnDelete;
@@ -20,9 +16,6 @@ import java.util.*;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends NamedEntity {
 
     @NotBlank
@@ -66,7 +59,48 @@ public class User extends NamedEntity {
         this(id, name, password, email, Arrays.asList(roles));
     }
 
+    protected User() {
+    }
+
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
+    }
+
+    public @NotBlank @Size(max = 256) String getPassword() {
+        return this.password;
+    }
+
+    public @Email @NotBlank @Size(max = 128) String getEmail() {
+        return this.email;
+    }
+
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    public @NotNull Date getRegistered() {
+        return this.registered;
+    }
+
+    public Set<Role> getRoles() {
+        return this.roles;
+    }
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public void setPassword(@NotBlank @Size(max = 256) String password) {
+        this.password = password;
+    }
+
+    public void setEmail(@Email @NotBlank @Size(max = 128) String email) {
+        this.email = email;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    public void setRegistered(@NotNull Date registered) {
+        this.registered = registered;
     }
 }

@@ -2,14 +2,16 @@ package com.github.lembek.RestaurantVoting.util;
 
 import com.github.lembek.RestaurantVoting.model.Role;
 import com.github.lembek.RestaurantVoting.model.User;
-import lombok.experimental.UtilityClass;
 
 import java.util.Set;
 
 import static com.github.lembek.RestaurantVoting.config.WebSecurityConfig.PASSWORD_ENCODER;
 
-@UtilityClass
-public class UserUtil {
+public final class UserUtil {
+
+    private UserUtil() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 
     public static User prepareToSave(User user) {
         user.setPassword(PASSWORD_ENCODER.encode(user.getPassword()));
@@ -23,7 +25,7 @@ public class UserUtil {
         return prepared;
     }
 
-    public User prepareForUpdate(User user, User newUser) {
+    public static User prepareForUpdate(User user, User newUser) {
         user.setName(newUser.getName());
         user.setEmail(newUser.getEmail().toLowerCase());
         user.setPassword(PASSWORD_ENCODER.encode(newUser.getPassword()));

@@ -2,12 +2,14 @@ package com.github.lembek.RestaurantVoting.util;
 
 import com.github.lembek.RestaurantVoting.error.IllegalRequestDataException;
 import com.github.lembek.RestaurantVoting.model.BaseEntity;
-import lombok.experimental.UtilityClass;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.lang.NonNull;
 
-@UtilityClass
-public class ValidationUtil {
+public final class ValidationUtil {
+
+    private ValidationUtil() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 
     public static void checkNew(BaseEntity entity) {
         if (!entity.isNew()) {

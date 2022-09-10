@@ -2,8 +2,7 @@ package com.github.lembek.RestaurantVoting.controller.admin;
 
 import com.github.lembek.RestaurantVoting.model.Restaurant;
 import com.github.lembek.RestaurantVoting.repository.RestaurantRepository;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
@@ -17,15 +16,18 @@ import java.util.List;
 import static com.github.lembek.RestaurantVoting.controller.admin.AdminController.ADMIN_URL;
 import static com.github.lembek.RestaurantVoting.util.ValidationUtil.checkNew;
 
-@Slf4j
 @RestController
-@AllArgsConstructor
 @CacheConfig(cacheNames = "restaurants")
 @RequestMapping(value = AdminRestaurantController.ADMIN_RESTAURANT_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminRestaurantController {
     public static final String ADMIN_RESTAURANT_URL = ADMIN_URL + "/restaurants";
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(AdminRestaurantController.class);
 
     private final RestaurantRepository restaurantRepository;
+
+    public AdminRestaurantController(RestaurantRepository restaurantRepository) {
+        this.restaurantRepository = restaurantRepository;
+    }
 
     @CacheEvict(allEntries = true)
     @ResponseStatus(HttpStatus.CREATED)

@@ -2,7 +2,6 @@ package com.github.lembek.RestaurantVoting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.util.ProxyUtils;
 import org.springframework.util.Assert;
@@ -11,16 +10,19 @@ import javax.persistence.*;
 
 @MappedSuperclass
 @Access(value = AccessType.FIELD)
-@Getter
-@Setter
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class BaseEntity implements Persistable<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     protected Integer id;
+
+    protected BaseEntity(Integer id) {
+        this.id = id;
+    }
+
+    protected BaseEntity() {
+    }
 
     @Override
     @Schema(hidden = true)
@@ -54,5 +56,13 @@ public abstract class BaseEntity implements Persistable<Integer> {
     @Override
     public String toString() {
         return getClass().getSimpleName() + ":" + id;
+    }
+
+    public Integer getId() {
+        return this.id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

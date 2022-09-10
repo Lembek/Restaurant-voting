@@ -1,19 +1,11 @@
 package com.github.lembek.RestaurantVoting.model;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Getter
-@Setter
 @MappedSuperclass
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class NamedEntity extends BaseEntity {
 
     @NotBlank
@@ -26,8 +18,19 @@ public abstract class NamedEntity extends BaseEntity {
         this.name = name;
     }
 
+    protected NamedEntity() {
+    }
+
     @Override
     public String toString() {
         return super.toString() + '[' + name + ']';
+    }
+
+    public @NotBlank @Size(min = 4, max = 128) String getName() {
+        return this.name;
+    }
+
+    public void setName(@NotBlank @Size(min = 4, max = 128) String name) {
+        this.name = name;
     }
 }

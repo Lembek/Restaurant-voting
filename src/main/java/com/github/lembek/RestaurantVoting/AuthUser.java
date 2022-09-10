@@ -1,12 +1,8 @@
 package com.github.lembek.RestaurantVoting;
 
 import com.github.lembek.RestaurantVoting.model.User;
-import lombok.Getter;
-import lombok.ToString;
 import org.springframework.lang.NonNull;
 
-@Getter
-@ToString(of = "user")
 public class AuthUser extends org.springframework.security.core.userdetails.User {
     private final User user;
 
@@ -17,5 +13,13 @@ public class AuthUser extends org.springframework.security.core.userdetails.User
 
     public Integer id() {
         return user.getId();
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public String toString() {
+        return "AuthUser(user=" + this.getUser() + ")";
     }
 }

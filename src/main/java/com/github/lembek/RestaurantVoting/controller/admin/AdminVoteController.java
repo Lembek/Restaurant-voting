@@ -2,8 +2,7 @@ package com.github.lembek.RestaurantVoting.controller.admin;
 
 import com.github.lembek.RestaurantVoting.model.Vote;
 import com.github.lembek.RestaurantVoting.repository.VoteRepository;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -13,14 +12,17 @@ import java.util.List;
 
 import static com.github.lembek.RestaurantVoting.controller.admin.AdminRestaurantController.ADMIN_RESTAURANT_URL;
 
-@Slf4j
 @RestController
-@AllArgsConstructor
 @RequestMapping(value = AdminVoteController.ADMIN_VOTE_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminVoteController {
     public static final String ADMIN_VOTE_URL = ADMIN_RESTAURANT_URL + "/{id}/votes";
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(AdminVoteController.class);
 
     private final VoteRepository voteRepository;
+
+    public AdminVoteController(VoteRepository voteRepository) {
+        this.voteRepository = voteRepository;
+    }
 
     @GetMapping("/rate")
     public int getRateByDate(@PathVariable int id, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

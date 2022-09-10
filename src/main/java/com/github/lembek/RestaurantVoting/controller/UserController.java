@@ -3,8 +3,7 @@ package com.github.lembek.RestaurantVoting.controller;
 import com.github.lembek.RestaurantVoting.AuthUser;
 import com.github.lembek.RestaurantVoting.model.User;
 import com.github.lembek.RestaurantVoting.repository.UserRepository;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
@@ -19,13 +18,16 @@ import static com.github.lembek.RestaurantVoting.util.UserUtil.prepareForRegistr
 import static com.github.lembek.RestaurantVoting.util.UserUtil.prepareForUpdate;
 import static com.github.lembek.RestaurantVoting.util.ValidationUtil.assureIdConsistent;
 
-@Slf4j
 @RestController
 @CacheConfig(cacheNames = "users")
-@AllArgsConstructor
 public class UserController {
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(UserController.class);
     private final UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/profile")
     public User get(@AuthenticationPrincipal AuthUser authUser) {

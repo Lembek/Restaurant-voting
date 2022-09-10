@@ -4,15 +4,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@UtilityClass
-public class JsonUtil {
+public final class JsonUtil {
     private static ObjectMapper mapper;
+
+    private JsonUtil() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 
     public static void setMapper(ObjectMapper mapper) {
         JsonUtil.mapper = mapper;

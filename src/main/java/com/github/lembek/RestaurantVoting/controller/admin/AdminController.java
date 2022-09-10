@@ -3,8 +3,7 @@ package com.github.lembek.RestaurantVoting.controller.admin;
 import com.github.lembek.RestaurantVoting.model.User;
 import com.github.lembek.RestaurantVoting.repository.UserRepository;
 import com.github.lembek.RestaurantVoting.util.UserUtil;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
@@ -18,16 +17,19 @@ import java.util.List;
 import static com.github.lembek.RestaurantVoting.util.ValidationUtil.assureIdConsistent;
 import static com.github.lembek.RestaurantVoting.util.ValidationUtil.checkNew;
 
-@Slf4j
 @RestController
-@AllArgsConstructor
 @CacheConfig(cacheNames = "users")
 @RequestMapping(value = AdminController.ADMIN_USER_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminController {
     public static final String ADMIN_URL = "/admin";
     public static final String ADMIN_USER_URL = ADMIN_URL + "/users";
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(AdminController.class);
 
     private final UserRepository userRepository;
+
+    public AdminController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping
     public List<User> getAll() {

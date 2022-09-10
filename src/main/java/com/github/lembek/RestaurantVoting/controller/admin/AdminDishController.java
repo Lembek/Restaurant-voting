@@ -4,8 +4,7 @@ import com.github.lembek.RestaurantVoting.model.Dish;
 import com.github.lembek.RestaurantVoting.model.Restaurant;
 import com.github.lembek.RestaurantVoting.repository.DishRepository;
 import com.github.lembek.RestaurantVoting.repository.RestaurantRepository;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,16 +22,20 @@ import static com.github.lembek.RestaurantVoting.controller.admin.AdminRestauran
 import static com.github.lembek.RestaurantVoting.util.ValidationUtil.assureIdConsistent;
 import static com.github.lembek.RestaurantVoting.util.ValidationUtil.checkNew;
 
-@Slf4j
 @RestController
 @CacheConfig(cacheNames = "dishes")
-@AllArgsConstructor
 @RequestMapping(value = AdminDishController.ADMIN_DISH_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminDishController {
     public static final String ADMIN_DISH_URL = ADMIN_RESTAURANT_URL + "/{id}/dishes";
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(AdminDishController.class);
 
     private final RestaurantRepository restaurantRepository;
     private final DishRepository dishRepository;
+
+    public AdminDishController(RestaurantRepository restaurantRepository, DishRepository dishRepository) {
+        this.restaurantRepository = restaurantRepository;
+        this.dishRepository = dishRepository;
+    }
 
     @GetMapping
     public List<Dish> getLunchMenuByDate(@PathVariable int id, @RequestParam(required = false)

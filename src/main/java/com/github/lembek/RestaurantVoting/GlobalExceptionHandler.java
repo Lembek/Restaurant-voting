@@ -2,8 +2,7 @@ package com.github.lembek.RestaurantVoting;
 
 import com.github.lembek.RestaurantVoting.error.AppException;
 import com.github.lembek.RestaurantVoting.util.ValidationUtil;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpHeaders;
@@ -25,10 +24,13 @@ import java.util.stream.Collectors;
 import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.MESSAGE;
 
 @RestControllerAdvice
-@AllArgsConstructor
-@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private final ErrorAttributes errorAttributes;
+
+    public GlobalExceptionHandler(ErrorAttributes errorAttributes) {
+        this.errorAttributes = errorAttributes;
+    }
 
     @ExceptionHandler(AppException.class)
     public ResponseEntity<?> appException(WebRequest request, AppException ex) {

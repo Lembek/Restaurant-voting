@@ -4,8 +4,7 @@ package com.github.lembek.RestaurantVoting.config;
 import com.github.lembek.RestaurantVoting.AuthUser;
 import com.github.lembek.RestaurantVoting.model.User;
 import com.github.lembek.RestaurantVoting.repository.UserRepository;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,14 +18,17 @@ import org.springframework.security.web.SecurityFilterChain;
 import java.util.Optional;
 
 
-@Slf4j
 @EnableWebSecurity
-@AllArgsConstructor
 public class WebSecurityConfig {
 
     public static final PasswordEncoder PASSWORD_ENCODER = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(WebSecurityConfig.class);
 
     private UserRepository userRepository;
+
+    public WebSecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -1,9 +1,5 @@
 package com.github.lembek.RestaurantVoting.model;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -16,9 +12,6 @@ import java.time.LocalDate;
         name = "vote_unique_local_date_user_idx")},
         indexes = {@Index(name = "vote_local_date_restaurant_id_idx", columnList = "local_date, restaurant_id")}
 )
-@Getter
-@Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Vote extends BaseEntity {
 
     @NotNull
@@ -45,6 +38,33 @@ public class Vote extends BaseEntity {
     public Vote(LocalDate localDate, User user, Restaurant restaurant) {
         this.localDate = localDate;
         this.user = user;
+        this.restaurant = restaurant;
+    }
+
+    protected Vote() {
+    }
+
+    public @NotNull LocalDate getLocalDate() {
+        return this.localDate;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public Restaurant getRestaurant() {
+        return this.restaurant;
+    }
+
+    public void setLocalDate(@NotNull LocalDate localDate) {
+        this.localDate = localDate;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
     }
 }

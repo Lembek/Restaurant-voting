@@ -6,8 +6,7 @@ import com.github.lembek.RestaurantVoting.error.VoteAlreadyExistException;
 import com.github.lembek.RestaurantVoting.model.Vote;
 import com.github.lembek.RestaurantVoting.repository.RestaurantRepository;
 import com.github.lembek.RestaurantVoting.repository.VoteRepository;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,16 +18,20 @@ import java.time.LocalTime;
 
 import static com.github.lembek.RestaurantVoting.controller.RestaurantController.RESTAURANT_URL;
 
-@Slf4j
 @RestController
-@AllArgsConstructor
 @RequestMapping(value = VoteController.VOTE_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteController {
     private static final LocalTime BOUNDARY_TIME = LocalTime.of(11, 0);
     public static final String VOTE_URL = RESTAURANT_URL + "/{id}/votes";
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(VoteController.class);
 
     private VoteRepository voteRepository;
     private RestaurantRepository restaurantRepository;
+
+    public VoteController(VoteRepository voteRepository, RestaurantRepository restaurantRepository) {
+        this.voteRepository = voteRepository;
+        this.restaurantRepository = restaurantRepository;
+    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping

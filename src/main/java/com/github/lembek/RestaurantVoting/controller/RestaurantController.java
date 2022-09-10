@@ -2,8 +2,7 @@ package com.github.lembek.RestaurantVoting.controller;
 
 import com.github.lembek.RestaurantVoting.model.Restaurant;
 import com.github.lembek.RestaurantVoting.repository.RestaurantRepository;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
@@ -14,15 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Slf4j
 @RestController
-@AllArgsConstructor
 @CacheConfig(cacheNames = "restaurants")
 @RequestMapping(value = RestaurantController.RESTAURANT_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController {
     public static final String RESTAURANT_URL = "/restaurants";
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(RestaurantController.class);
 
     private final RestaurantRepository restaurantRepository;
+
+    public RestaurantController(RestaurantRepository restaurantRepository) {
+        this.restaurantRepository = restaurantRepository;
+    }
 
     @Cacheable
     @GetMapping

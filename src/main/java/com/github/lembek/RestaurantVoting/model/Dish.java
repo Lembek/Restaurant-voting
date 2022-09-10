@@ -1,9 +1,5 @@
 package com.github.lembek.RestaurantVoting.model;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -15,9 +11,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "dish", indexes =
         {@Index(name = "dish_restaurant_id_local_date_idx", columnList = "restaurant_id, local_date")})
-@Getter
-@Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Dish extends NamedEntity {
 
     @Min(value = 10)
@@ -49,5 +42,32 @@ public class Dish extends NamedEntity {
 
     public Dish(Integer id, String name, int price, Restaurant restaurant) {
         this(id, name, price, LocalDate.now(), restaurant);
+    }
+
+    protected Dish() {
+    }
+
+    public @Min(value = 10) @NotNull int getPrice() {
+        return this.price;
+    }
+
+    public @NotNull LocalDate getLocalDate() {
+        return this.localDate;
+    }
+
+    public Restaurant getRestaurant() {
+        return this.restaurant;
+    }
+
+    public void setPrice(@Min(value = 10) @NotNull int price) {
+        this.price = price;
+    }
+
+    public void setLocalDate(@NotNull LocalDate localDate) {
+        this.localDate = localDate;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 }
