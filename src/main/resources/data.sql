@@ -14,11 +14,11 @@ VALUES ('Restaurant1'),
 INSERT INTO DISH (NAME, PRICE, RESTAURANT_ID)
 VALUES ('Fish', 100, 1),
        ('Soup', 50, 1),
-       ('Steak', 90, 2),
-       ('Borch', 60, 2);
+       ('Steak', 90, 2);
 
 INSERT INTO DISH (NAME, PRICE, LOCAL_DATE, RESTAURANT_ID)
-VALUES ('Salad', 45, '2000-05-11', 1);
+VALUES ('Borch', 60, '2000-05-11', 1),
+       ('Salad', 45, '2000-05-11', 1);
 
 INSERT INTO VOTE (USER_ID, RESTAURANT_ID)
 VALUES (1, 1);

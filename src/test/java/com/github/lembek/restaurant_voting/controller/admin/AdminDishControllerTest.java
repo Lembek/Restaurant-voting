@@ -9,8 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 import static com.github.lembek.restaurant_voting.PopulateTestData.*;
 import static com.github.lembek.restaurant_voting.controller.admin.AdminRestaurantController.ADMIN_RESTAURANT_URL;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -31,7 +29,7 @@ class AdminDishControllerTest extends AbstractControllerTest {
         perform(get(ADMIN_DISH_TEST_URL).param("localDate", "2000-05-11"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(DISH_MATCHER.contentJson(List.of(salad)));
+                .andExpect(DISH_MATCHER.contentJson(borch, salad));
     }
 
     @Test

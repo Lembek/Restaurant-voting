@@ -54,7 +54,7 @@ class UserControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(USER_MAIL)
     void updateMySelf() throws Exception {
-        perform(patch("/profile")
+        perform(put("/profile")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeAdditionProps(getUpdatedUser(), "password", "new password")))
                 .andDo(print())

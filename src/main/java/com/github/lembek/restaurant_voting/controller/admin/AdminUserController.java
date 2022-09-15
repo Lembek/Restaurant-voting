@@ -6,12 +6,16 @@ import com.github.lembek.restaurant_voting.util.UserUtil;
 import org.slf4j.Logger;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 import static com.github.lembek.restaurant_voting.util.ValidationUtil.assureIdConsistent;
@@ -19,15 +23,15 @@ import static com.github.lembek.restaurant_voting.util.ValidationUtil.checkNew;
 
 @RestController
 @CacheConfig(cacheNames = "users")
-@RequestMapping(value = AdminController.ADMIN_USER_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class AdminController {
+@RequestMapping(value = AdminUserController.ADMIN_USER_URL, produces = MediaType.APPLICATION_JSON_VALUE)
+public class AdminUserController {
     public static final String ADMIN_URL = "/admin";
     public static final String ADMIN_USER_URL = ADMIN_URL + "/users";
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(AdminController.class);
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(AdminUserController.class);
 
     private final UserRepository userRepository;
 
-    public AdminController(UserRepository userRepository) {
+    public AdminUserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -61,7 +65,7 @@ public class AdminController {
         user.setEnabled(enabled);
     }
 
-    @CacheEvict(allEntries = true)
+    @CachePut(key = "#user.getEmail()")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable int id, @Valid @RequestBody User user) {
@@ -72,9 +76,13 @@ public class AdminController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public User create(@Valid @RequestBody User user) {
+    public ResponseEntity<User> create(@Valid @RequestBody User user) {
         log.info("create {}", user);
         checkNew(user);
-        return userRepository.save(UserUtil.prepareToSave(user));
+        User created = userRepository.save(UserUtil.prepareToSave(user));
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(ADMIN_USER_URL + "/{id}")
+                .buildAndExpand(created.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(created);
     }
 }

@@ -1,14 +1,13 @@
 package com.github.lembek.restaurant_voting;
 
-import com.github.lembek.restaurant_voting.controller.MatcherFactory;
 import com.github.lembek.restaurant_voting.model.*;
 
 import java.time.LocalDate;
 
 public class PopulateTestData {
-    public static final MatcherFactory.Matcher<Dish> DISH_MATCHER = MatcherFactory.usingEqualsComparator(Dish.class);
-    public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingEqualsComparator(Restaurant.class);
-    public static final MatcherFactory.Matcher<Vote> VOTE_MATCHER = MatcherFactory.usingEqualsComparator(Vote.class);
+    public static final MatcherFactory.Matcher<Dish> DISH_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Dish.class, "restaurant");
+    public static final MatcherFactory.Matcher<Restaurant> RESTAURANT_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Restaurant.class);
+    public static final MatcherFactory.Matcher<Vote> VOTE_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(Vote.class, "user", "restaurant");
     public static final MatcherFactory.Matcher<User> USER_MATCHER = MatcherFactory.usingIgnoringFieldsComparator(User.class, "registered", "password");
 
     public static final int FIRST_ID = 1;
@@ -32,13 +31,13 @@ public class PopulateTestData {
     public static final Dish fish = new Dish(FIRST_ID, "Fish", 100, restaurant1);
     public static final Dish soup = new Dish(SECOND_ID, "Soup", 50, restaurant1);
     public static final Dish steak = new Dish(THIRD_ID, "Steak", 90, restaurant2);
-    public static final Dish borch = new Dish(FOURTH_ID, "Borch", 60, restaurant2);
+    public static final Dish borch = new Dish(FOURTH_ID, "Borch", 60, LocalDate.of(2000, 5, 11), restaurant1);
     public static final Dish salad = new Dish(FIFTH_ID, "Salad", 45, LocalDate.of(2000, 5, 11), restaurant1);
     public static final Dish newDish = new Dish(SIXTH_ID, "new dish", 100, LocalDate.now(), restaurant1);
 
     public static final Vote vote1 = new Vote(FIRST_ID, LocalDate.now(), user, restaurant1);
     public static final Vote vote2 = new Vote(SECOND_ID, LocalDate.of(2000, 5, 11), user, restaurant1);
-    public static final Vote newVote = new Vote(THIRD_ID, LocalDate.now(), admin, restaurant2);
+    public static final Vote newVote = new Vote(THIRD_ID, LocalDate.now(), admin, restaurant1);
     public static final Vote changedVote = new Vote(FIRST_ID, LocalDate.now(), user, restaurant2);
 
     private PopulateTestData() {

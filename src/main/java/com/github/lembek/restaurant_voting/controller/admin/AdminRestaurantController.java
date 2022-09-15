@@ -5,19 +5,25 @@ import com.github.lembek.restaurant_voting.repository.RestaurantRepository;
 import org.slf4j.Logger;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
-import static com.github.lembek.restaurant_voting.controller.admin.AdminController.ADMIN_URL;
+import static com.github.lembek.restaurant_voting.controller.RestaurantController.RESTAURANT_URL;
+import static com.github.lembek.restaurant_voting.controller.admin.AdminUserController.ADMIN_URL;
+import static com.github.lembek.restaurant_voting.util.ValidationUtil.assureIdConsistent;
 import static com.github.lembek.restaurant_voting.util.ValidationUtil.checkNew;
 
 @RestController
-@CacheConfig(cacheNames = "restaurants")
+@CacheConfig(cacheNames = {"restaurants", "dishes"})
 @RequestMapping(value = AdminRestaurantController.ADMIN_RESTAURANT_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminRestaurantController {
     public static final String ADMIN_RESTAURANT_URL = ADMIN_URL + "/restaurants";
@@ -29,13 +35,17 @@ public class AdminRestaurantController {
         this.restaurantRepository = restaurantRepository;
     }
 
-    @CacheEvict(allEntries = true)
+    @CacheEvict(value = "restaurants", allEntries = true)
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Restaurant create(@RequestBody @Valid Restaurant restaurant) {
+    public ResponseEntity<Restaurant> create(@RequestBody @Valid Restaurant restaurant) {
         log.info("create {}", restaurant);
         checkNew(restaurant);
-        return restaurantRepository.save(restaurant);
+        Restaurant created = restaurantRepository.save(restaurant);
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(RESTAURANT_URL + "/{id}")
+                .buildAndExpand(created.getId()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
     @GetMapping
@@ -50,7 +60,11 @@ public class AdminRestaurantController {
         return restaurantRepository.getExisted(id);
     }
 
-    @CacheEvict(allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "restaurants", allEntries = true),
+            @CacheEvict(value = "dishes", key = "'getLunchMenuForUser' + #id + T(java.time.LocalDate).now()"),
+            @CacheEvict(value = "dishes", key = "'getAllMenu' + T(java.time.LocalDate).now()")
+    })
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
@@ -58,13 +72,28 @@ public class AdminRestaurantController {
         restaurantRepository.deleteExisted(id);
     }
 
-    @CacheEvict(allEntries = true)
+    @Caching(evict = {
+            @CacheEvict(value = "restaurants", allEntries = true),
+            @CacheEvict(value = "dishes", key = "'getAllMenu' + T(java.time.LocalDate).now()")
+    })
     @PatchMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Transactional
-    public void update(@PathVariable int id, @RequestParam String name) {
+    public void updateName(@PathVariable int id, @RequestParam String name) {
         log.info("patch restaurant with id={}", id);
         Restaurant restaurant = restaurantRepository.getExisted(id);
         restaurant.setName(name);
+    }
+
+    @Caching(evict = {
+            @CacheEvict(value = "restaurants", allEntries = true),
+            @CacheEvict(value = "dishes", key = "'getAllMenu' + T(java.time.LocalDate).now()")
+    })
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable int id, @RequestBody Restaurant restaurant) {
+        log.info("update restaurant with id={}", id);
+        assureIdConsistent(restaurant, id);
+        restaurantRepository.save(restaurant);
     }
 }

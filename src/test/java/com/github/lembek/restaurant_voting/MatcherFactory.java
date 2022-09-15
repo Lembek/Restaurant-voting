@@ -1,4 +1,4 @@
-package com.github.lembek.restaurant_voting.controller;
+package com.github.lembek.restaurant_voting;
 
 import com.github.lembek.restaurant_voting.util.JsonUtil;
 import org.springframework.test.web.servlet.MvcResult;

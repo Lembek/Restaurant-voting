@@ -15,14 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Set;
 
 import static com.github.lembek.restaurant_voting.PopulateTestData.*;
-import static com.github.lembek.restaurant_voting.controller.admin.AdminController.ADMIN_USER_URL;
+import static com.github.lembek.restaurant_voting.controller.admin.AdminUserController.ADMIN_USER_URL;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
-class AdminControllerTest extends AbstractControllerTest {
+class AdminUserControllerTest extends AbstractControllerTest {
 
     @Autowired
     private UserRepository userRepository;

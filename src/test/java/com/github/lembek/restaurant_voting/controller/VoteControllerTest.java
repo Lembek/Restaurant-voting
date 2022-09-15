@@ -2,6 +2,8 @@ package com.github.lembek.restaurant_voting.controller;
 
 import com.github.lembek.restaurant_voting.AbstractControllerTest;
 import com.github.lembek.restaurant_voting.repository.VoteRepository;
+import com.github.lembek.restaurant_voting.util.DateTimeUtil;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -9,7 +11,6 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 import static com.github.lembek.restaurant_voting.PopulateTestData.*;
 import static com.github.lembek.restaurant_voting.controller.RestaurantController.RESTAURANT_URL;
@@ -22,10 +23,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class VoteControllerTest extends AbstractControllerTest {
     public static final String VOTE_TEST_FIRST_RESTAURANT_URL = RESTAURANT_URL + "/" + FIRST_ID + "/votes";
     public static final String VOTE_TEST_SECOND_RESTAURANT_URL = RESTAURANT_URL + "/" + SECOND_ID + "/votes";
-    public static final LocalTime BOUNDARY_TEST_TIME = LocalTime.of(11, 0);
 
     @Autowired
     private VoteRepository voteRepository;
+
+    @AfterAll
+    static void cleanup() {
+        DateTimeUtil.resetTime();
+    }
 
     @Test
     @WithUserDetails(ADMIN_MAIL)
@@ -35,7 +40,7 @@ class VoteControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        VOTE_MATCHER.assertMatch(voteRepository.getByUserAndDate(LocalDate.now(), SECOND_ID), newVote);
+        VOTE_MATCHER.assertMatch(voteRepository.getByUserAndDate(LocalDate.now(), SECOND_ID).get(), newVote);
     }
 
     @Test
@@ -49,21 +54,26 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(USER_MAIL)
-    void changeVote() throws Exception {
-        LocalTime time = LocalTime.now();
-        if (time.isBefore(BOUNDARY_TEST_TIME)) {
-            perform(patch(VOTE_TEST_SECOND_RESTAURANT_URL)
-                    .contentType(MediaType.APPLICATION_JSON))
-                    .andDo(print())
-                    .andExpect(status().isNoContent());
+    void changeVoteAfterBoundary() throws Exception {
+        DateTimeUtil.setTime("2007-12-03T11:01:30.00Z");
 
-            VOTE_MATCHER.assertMatch(voteRepository.getByUserAndDate(LocalDate.now(), FIRST_ID), changedVote);
-        } else {
-            perform(patch(VOTE_TEST_SECOND_RESTAURANT_URL)
-                    .contentType(MediaType.APPLICATION_JSON))
-                    .andDo(print())
-                    .andExpect(status().isConflict());
-        }
+        perform(patch(VOTE_TEST_SECOND_RESTAURANT_URL)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @WithUserDetails(USER_MAIL)
+    void changeVoteBeforeBoundary() throws Exception {
+        DateTimeUtil.setTime("2007-12-03T10:59:30.00Z");
+
+        perform(patch(VOTE_TEST_SECOND_RESTAURANT_URL)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        VOTE_MATCHER.assertMatch(voteRepository.getByUserAndDate(LocalDate.now(), FIRST_ID).get(), changedVote);
     }
 
     @Test

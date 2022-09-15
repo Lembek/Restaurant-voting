@@ -18,12 +18,12 @@ public class Vote extends BaseEntity {
     @Column(name = "local_date", nullable = false, updatable = false, columnDefinition = "date default now()")
     private LocalDate localDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;

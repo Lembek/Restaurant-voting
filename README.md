@@ -29,7 +29,7 @@ As a result, provide a link to github repository. It should contain the code, RE
 ###### P.P.S.: Assume that your API will be used by a frontend developer to build frontend on top of that.
 
 
-## [Swagger](https://localhost:8080/)
+## [Swagger](http://localhost:8080/swagger-ui/index.html)
 #### Credentials for authorization:
 - User: 
   - email: user@gmail.com
@@ -40,7 +40,16 @@ As a result, provide a link to github repository. It should contain the code, RE
 
 
 ## cURLs for tests
+##### **Admin API: administration of dishes (get All)**
+
+- Get all menu (or by date):
+
+```console
+curl -X GET --location "http://localhost:8080/admin/restaurants/dishes" -H "Accept: application/json" --basic --user admin@javaops.ru:admin
+```
+
 ##### **Admin API: administration of users**
+
   - Get all:
 
 ```console
@@ -79,6 +88,12 @@ curl -X PUT --location "http://localhost:8080/admin/users/1" -H "Content-Type: a
 
 ##### **Admin API: administration of restaurants**
 
+  -Update (put):
+
+```console
+curl -X PUT --location "http://localhost:8080/admin/restaurants/1" -H "Content-Type: application/json" -d "{\"name\": \"New name\"}"--basic --user admin@javaops.ru:admin
+```
+
   - Get all:
 
 ```console
@@ -110,6 +125,12 @@ curl -X POST --location "http://localhost:8080/admin/restaurants" -H "Content-Ty
 ```
 
 ##### **Admin API: administration of dishes**
+
+  - Update (put):
+
+```console
+curl -X PUT --location "http://localhost:8080/admin/restaurants/1/dishes/1" -H "Content-Type: application/json" -d "{\"name\": \"string\",\"price\": 100,\"localDate\": \"2022-09-15\"}"--basic --user admin@javaops.ru:admin
+```
 
   - Get menu of restaurant by date:
 
@@ -157,6 +178,12 @@ curl -X GET --location "http://localhost:8080/admin/restaurants/1/votes?localDat
 
 ##### **User API: profile**
 
+  - Get vote:
+
+```console
+curl -X GET --location "http://localhost:8080/profile/my-vote" -H "Accept: application/json" --basic --user admin@javaops.ru:admin
+```
+
   - Get user self:
 
 ```console
@@ -172,7 +199,7 @@ curl -X DELETE --location "http://localhost:8080/profile" --basic --user user@gm
   - Update user self:
 
 ```console
-curl -X PATCH --location "http://localhost:8080/profile" -H "Content-Type: application/json" -d "{\"name\": \"string\",\"password\": \"string\",\"email\": \"string@gmail.com\",\"enabled\": true,\"roles\": [\"USER\"]}" --basic --user user@gmail.com:password
+curl -X PUT --location "http://localhost:8080/profile" -H "Content-Type: application/json" -d "{\"name\": \"string\",\"password\": \"string\",\"email\": \"string@gmail.com\",\"enabled\": true,\"roles\": [\"USER\"]}" --basic --user user@gmail.com:password
 ```
 
 ##### **User API: restaurant**

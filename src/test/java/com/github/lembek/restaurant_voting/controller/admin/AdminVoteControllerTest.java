@@ -4,9 +4,8 @@ import com.github.lembek.restaurant_voting.AbstractControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithUserDetails;
 
-import java.util.List;
-
-import static com.github.lembek.restaurant_voting.PopulateTestData.*;
+import static com.github.lembek.restaurant_voting.PopulateTestData.ADMIN_MAIL;
+import static com.github.lembek.restaurant_voting.PopulateTestData.FIRST_ID;
 import static com.github.lembek.restaurant_voting.controller.admin.AdminRestaurantController.ADMIN_RESTAURANT_URL;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -19,18 +18,9 @@ class AdminVoteControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(ADMIN_MAIL)
     void getRateByDate() throws Exception {
-        perform(get(ADMIN_VOTE_TEST_URL + "/rate"))
+        perform(get(ADMIN_VOTE_TEST_URL + "/rate").param("localDate", "2000-05-11"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("1"));
-    }
-
-    @Test
-    @WithUserDetails(ADMIN_MAIL)
-    void getAll() throws Exception {
-        perform(get(ADMIN_VOTE_TEST_URL))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(VOTE_MATCHER.contentJson(List.of(vote1)));
     }
 }

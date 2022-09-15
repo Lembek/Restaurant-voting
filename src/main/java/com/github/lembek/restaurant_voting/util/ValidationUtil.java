@@ -2,6 +2,7 @@ package com.github.lembek.restaurant_voting.util;
 
 import com.github.lembek.restaurant_voting.error.IllegalRequestDataException;
 import com.github.lembek.restaurant_voting.model.BaseEntity;
+import com.github.lembek.restaurant_voting.model.Dish;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.lang.NonNull;
 
@@ -21,10 +22,7 @@ public final class ValidationUtil {
         if (entity.isNew()) {
             entity.setId(id);
         } else if (entity.id() != id) {
-            String message = entity.getClass().getSimpleName().equals("Restaurant") ?
-                    "Restaurant with id=" + id + " don't have this dish" :
-                    entity.getClass().getSimpleName() + " must has id=" + id;
-            throw new IllegalRequestDataException(message);
+            throw new IllegalRequestDataException(entity.getClass().getSimpleName() + " must has id=" + id);
         }
     }
 
@@ -39,6 +37,12 @@ public final class ValidationUtil {
             throw new IllegalRequestDataException("Entity with id=" + id + " not found");
         }
         return obj;
+    }
+
+    public static void checkDish(Dish dish, int dishId, int restaurantId) {
+        if (dish == null) {
+            throw new IllegalRequestDataException("Restaurant with id=" + restaurantId + " haven't dish with id=" + dishId);
+        }
     }
 
     @NonNull

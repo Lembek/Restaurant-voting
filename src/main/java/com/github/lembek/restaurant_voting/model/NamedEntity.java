@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 @MappedSuperclass
 public abstract class NamedEntity extends BaseEntity {
     private static final int MIN_LENGTH = 4;
-    private static final int MAX_LENGTH = 128;
+    private static final int MAX_LENGTH = 256;
 
     @NotBlank
     @Size(min = MIN_LENGTH, max = MAX_LENGTH)
