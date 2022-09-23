@@ -2,10 +2,12 @@ package com.github.lembek.restaurant_voting.controller.admin;
 
 import com.github.lembek.restaurant_voting.model.Restaurant;
 import com.github.lembek.restaurant_voting.repository.RestaurantRepository;
+import com.github.lembek.restaurant_voting.repository.VoteRepository;
 import org.slf4j.Logger;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.github.lembek.restaurant_voting.controller.RestaurantController.RESTAURANT_URL;
@@ -30,9 +33,11 @@ public class AdminRestaurantController {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(AdminRestaurantController.class);
 
     private final RestaurantRepository restaurantRepository;
+    private final VoteRepository voteRepository;
 
-    public AdminRestaurantController(RestaurantRepository restaurantRepository) {
+    public AdminRestaurantController(RestaurantRepository restaurantRepository, VoteRepository voteRepository) {
         this.restaurantRepository = restaurantRepository;
+        this.voteRepository = voteRepository;
     }
 
     @CacheEvict(value = "restaurants", allEntries = true)
@@ -95,5 +100,15 @@ public class AdminRestaurantController {
         log.info("update restaurant with id={}", id);
         assureIdConsistent(restaurant, id);
         restaurantRepository.save(restaurant);
+    }
+
+    @GetMapping("{id}/votes/rate")
+    public int getRateByDate(@PathVariable int id, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @RequestParam(required = false) LocalDate localDate) {
+        log.info("get rate of restaurant with id={}", id);
+        if (localDate == null) {
+            localDate = LocalDate.now();
+        }
+        return voteRepository.getRate(id, localDate);
     }
 }

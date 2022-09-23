@@ -1,5 +1,6 @@
 package com.github.lembek.restaurant_voting.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -18,6 +19,7 @@ public class Vote extends BaseEntity {
     @Column(name = "local_date", nullable = false, updatable = false, columnDefinition = "date default now()")
     private LocalDate localDate;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
@@ -42,6 +44,10 @@ public class Vote extends BaseEntity {
     }
 
     protected Vote() {
+    }
+
+    public Vote(Vote vote) {
+        this(vote.getId(), vote.getLocalDate(), vote.getUser(), vote.getRestaurant());
     }
 
     public @NotNull LocalDate getLocalDate() {

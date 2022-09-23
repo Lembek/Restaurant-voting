@@ -1,11 +1,8 @@
 package com.github.lembek.restaurant_voting.controller;
 
 import com.github.lembek.restaurant_voting.AuthUser;
-import com.github.lembek.restaurant_voting.error.IllegalRequestDataException;
 import com.github.lembek.restaurant_voting.model.User;
-import com.github.lembek.restaurant_voting.model.Vote;
 import com.github.lembek.restaurant_voting.repository.UserRepository;
-import com.github.lembek.restaurant_voting.repository.VoteRepository;
 import org.slf4j.Logger;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -19,7 +16,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.time.LocalDate;
 
 import static com.github.lembek.restaurant_voting.util.UserUtil.prepareForRegistration;
 import static com.github.lembek.restaurant_voting.util.UserUtil.prepareForUpdate;
@@ -31,11 +27,9 @@ public class UserController {
 
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(UserController.class);
     private final UserRepository userRepository;
-    private final VoteRepository voteRepository;
 
-    public UserController(UserRepository userRepository, VoteRepository voteRepository) {
+    public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.voteRepository = voteRepository;
     }
 
     @GetMapping("/profile")
@@ -71,14 +65,5 @@ public class UserController {
         assureIdConsistent(user, authUser.id());
         User updated = authUser.getUser();
         userRepository.save(prepareForUpdate(updated, user));
-    }
-
-    @GetMapping("/profile/my-vote")
-    public Vote getTodayVote(@AuthenticationPrincipal AuthUser authUser) {
-        log.info("get vote by user with id={}", authUser.id());
-        return voteRepository.getByUserAndDate(LocalDate.now(), authUser.id()).orElseThrow(
-                () -> {
-                    throw new IllegalRequestDataException("You haven't already voted today");
-                });
     }
 }

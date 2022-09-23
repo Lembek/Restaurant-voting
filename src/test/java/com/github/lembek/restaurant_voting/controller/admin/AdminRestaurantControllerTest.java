@@ -15,10 +15,13 @@ import static com.github.lembek.restaurant_voting.controller.admin.AdminRestaura
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
 class AdminRestaurantControllerTest extends AbstractControllerTest {
+
+    public static final String ADMIN_VOTE_TEST_URL = ADMIN_RESTAURANT_URL + "/" + FIRST_ID + "/votes/rate";
 
     @Autowired
     private RestaurantRepository restaurantRepository;
@@ -84,5 +87,14 @@ class AdminRestaurantControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
 
         RESTAURANT_MATCHER.assertMatch(restaurantRepository.getExisted(FIRST_ID), getUpdatedRestaurant());
+    }
+
+    @Test
+    @WithUserDetails(ADMIN_MAIL)
+    void getRateByDate() throws Exception {
+        perform(get(ADMIN_VOTE_TEST_URL).param("localDate", "2000-05-11"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("1"));
     }
 }

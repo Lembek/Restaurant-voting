@@ -16,7 +16,7 @@ spring:
 
   cache:
     cache-names: users, restaurants, dishes
-    caffeine.spec: maximumSize=5000,expireAfterAccess=60s
+    caffeine.spec: maximumSize=5000
 
 logging:
   level:

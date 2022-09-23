@@ -32,7 +32,7 @@ public class DishController {
 
     @Cacheable(key = "'getLunchMenuForUser' + #id + T(java.time.LocalDate).now()")
     @GetMapping(DISH_URL)
-    public List<Dish> getLunchMenuForUser(@PathVariable int id) {
+    public List<Dish> getMenuByRestaurantToday(@PathVariable int id) {
         log.info("get lunch menu of restaurant with id={}", id);
         restaurantRepository.getExisted(id);
         return dishRepository.getAllByDateAndRestaurant(id, LocalDate.now());
@@ -40,7 +40,7 @@ public class DishController {
 
     @Cacheable(key = "'getAllMenu' + T(java.time.LocalDate).now()")
     @GetMapping(ALL_MENU_URL)
-    public List<Dish> getAllMenu() {
+    public List<Dish> getAllMenuToday() {
         log.info("get all menu today");
         return dishRepository.getAllByDate(LocalDate.now());
     }

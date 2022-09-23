@@ -237,9 +237,3 @@ curl -X POST --location "http://localhost:8080/restaurants/1/votes" --basic --us
 ```console
 curl -X PATCH --location "http://localhost:8080/restaurants/1/votes" --basic --user admin@javaops.ru:admin
 ```
-
-  - Get rate of restaurant:
-
-```console
-curl -X GET --location "http://localhost:8080/restaurants/1/votes/rate" --basic --user user@gmail.com:password
-```

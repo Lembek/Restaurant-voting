@@ -1,5 +1,6 @@
 package com.github.lembek.restaurant_voting.model;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -20,6 +21,7 @@ public class Dish extends NamedEntity {
     @Column(name = "local_date", nullable = false, updatable = false, columnDefinition = "date default now()")
     private LocalDate localDate;
 
+    @Hidden
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)

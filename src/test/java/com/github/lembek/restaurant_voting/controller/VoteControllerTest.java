@@ -75,13 +75,4 @@ class VoteControllerTest extends AbstractControllerTest {
 
         VOTE_MATCHER.assertMatch(voteRepository.getByUserAndDate(LocalDate.now(), FIRST_ID).get(), changedVote);
     }
-
-    @Test
-    @WithUserDetails(USER_MAIL)
-    void getRate() throws Exception {
-        perform(get(VOTE_TEST_FIRST_RESTAURANT_URL + "/rate"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string("1"));
-    }
 }
